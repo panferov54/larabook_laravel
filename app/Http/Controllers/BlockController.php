@@ -83,7 +83,9 @@ class BlockController extends Controller
      */
     public function edit($id)
     {
-        //
+        $block=Block::find($id);
+        $topics=Topic::pluck('topicname','id');
+        return view('block.edit',['block'=>$block,'topics'=>$topics]);
     }
 
     /**
@@ -95,7 +97,22 @@ class BlockController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $block=Block::find($id);
+        $block->topicid=$request->topicid;
+        $block->title=$request->title;
+        $block->content=$request->block_content;
+
+        $fname=$request->file('imagepath');
+        if($fname){
+            $original_name=$request->file('imagepath')->getClientOriginalName();
+            $request->file('imagepath')->move(public_path().'/images',$original_name);
+            $block->imagepath='images/'.$original_name;
+        }
+        if(!$block->save()){
+            $err=$block->getErrors();
+            return  redirect("block/$id/")->with('errors')->withInput();
+    }
+        return  redirect("topic/$block->topicid");
     }
 
     /**
@@ -106,6 +123,8 @@ class BlockController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $block=Block::find($id);
+       $block->delete();
+       return redirect('topic');
     }
 }

@@ -109,4 +109,11 @@ $topics=Topic::all();
     {
         //
     }
+
+    public function search(Request $request){
+        $search=$request->searchform;
+        $search='%'.$search.'%';//поиск по содержимому в любом месте строки
+        $topics=Topic::where('topicname','like',$search)->get();//like - sql оператор для поиска совпадений внутри текста
+        return view('topic.index',['topics'=>$topics,'id'=>0]);
+    }
 }

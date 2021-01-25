@@ -12,9 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 Route::resource('topic','TopicController');
 
 Route::resource('block','BlockController');
+Route::post('topic/search','TopicController@search');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
