@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Block;
 use App\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlockController extends Controller
 {
@@ -25,6 +26,19 @@ class BlockController extends Controller
      */
     public function create()
     {
+
+//        if (!Auth::user()->name ==='noff')
+//        {
+//
+//            return redirect('login');
+//
+//        }
+
+
+
+
+
+
         $block=new Block;
         //получаем массив топиков
         $topics=Topic::pluck('topicname','id');
@@ -39,6 +53,8 @@ class BlockController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $block=new Block;
         $fname=$request->file('imagepath');
         if($fname){
@@ -126,5 +142,13 @@ class BlockController extends Controller
        $block=Block::find($id);
        $block->delete();
        return redirect('topic');
+    }
+
+
+    public function search(Request $request){
+        $search=$request->searchform;
+        $search='%'.$search.'%';//поиск по содержимому в любом месте строки
+        $blocks=Block::where('title','like',$search)->get();//like - sql оператор для поиска совпадений внутри текста
+        return view('topic.index',['blocks'=>$blocks,'id'=>0]);
     }
 }

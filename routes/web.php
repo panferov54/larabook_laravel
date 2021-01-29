@@ -18,6 +18,9 @@ Route::resource('topic','TopicController');
 
 Route::resource('block','BlockController');
 Route::post('topic/search','TopicController@search');
+Route::post('topic/searchB','TopicController@searchB');
+//Route::post('topic/search','BlockController@search');
+//Route::get('topic','TopicController@isAdmin');
 
 
 Auth::routes();

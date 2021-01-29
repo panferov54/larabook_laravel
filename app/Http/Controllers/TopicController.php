@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Block;
 use App\Topic;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
@@ -16,8 +18,15 @@ class TopicController extends Controller
     public function index()
     {
 $topics=Topic::all();
+$blocks=Block::all();
+        $is_admin=0;
+        if (Auth::check())
+        {
+            $user_id=Auth::id();
+            $is_admin=User::find($user_id)->is_admin;
 
-        return view('topic.index',['topics'=>$topics,'id'=>0]);
+        }
+        return view('topic.index',['topics'=>$topics,'blocks'=>$blocks,'is_admin'=>$is_admin,'id'=>0]);
     }
 
     /**
@@ -68,12 +77,21 @@ $topics=Topic::all();
         $blocks=  Block::where('topicid',$id)->get();
         //получение всех топиков
         $topics= Topic::all();
+        $is_admin=0;
+        if (Auth::check())
+        {
+            $user_id=Auth::id();
+           $is_admin=User::find($user_id)->is_admin;
+
+        }else {
+
+        }
            // $topicname=Topic::pluck('topicname','id')->get($id);
         //ILI
         $topicname=Topic::find($id)->topicname;
 
 
-        return view('topic.index',['topics'=>$topics,'blocks'=>$blocks,'id'=>$id,'topicname'=>$topicname]);
+        return view('topic.index',['topics'=>$topics,'blocks'=>$blocks,'id'=>$id,'topicname'=>$topicname,'is_admin'=>$is_admin]);
     }
 
     /**
@@ -111,9 +129,45 @@ $topics=Topic::all();
     }
 
     public function search(Request $request){
+        $is_admin=0;
+        if (Auth::check())
+        {
+            $user_id=Auth::id();
+            $is_admin=User::find($user_id)->is_admin;
+
+
+        }
         $search=$request->searchform;
         $search='%'.$search.'%';//поиск по содержимому в любом месте строки
         $topics=Topic::where('topicname','like',$search)->get();//like - sql оператор для поиска совпадений внутри текста
-        return view('topic.index',['topics'=>$topics,'id'=>0]);
+
+        return view('topic.index',['topics'=>$topics,'is_admin'=>$is_admin,'id'=>0]);
+    }
+
+    public function searchB(Request $request){
+        $is_admin=0;
+        if (Auth::check())
+        {
+            $user_id=Auth::id();
+            $is_admin=User::find($user_id)->is_admin;
+
+
+        }
+        $search=$request->searchform;
+        $search='%'.$search.'%';//поиск по содержимому в любом месте строки
+        $blocks=Block::where('title','like',$search)->get();//like - sql оператор для поиска совпадений внутри текста
+        return view('topic.index',['blocks'=>$blocks,'is_admin'=>$is_admin,'id'=>0]);
+    }
+
+    public function isAdmin(){
+        $is_admin=0;
+        if (Auth::check())
+        {
+            $user_id=Auth::id();
+            $is_admin=User::find($user_id)->is_admin;
+
+
+        }
+        return view('layouts.app',['is_admin'=>$is_admin]);
     }
 }

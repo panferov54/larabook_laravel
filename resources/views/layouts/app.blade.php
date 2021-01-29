@@ -24,8 +24,9 @@
 </head>
 <body>
 
+
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar">
             <div class="container">
                 <div class="navbar-header">
 
@@ -37,30 +38,31 @@
 
                 </div>
 
-                <div class="collapse navbar-collapse"  id="app-navbar-collapse">
+                <div class="collapse navbar-collapse bg-light"  id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
+
                         &nbsp;@section('menu')
-                            <div class="col-12">
-                                <ul class="nav nav-justified">
+
+                                <ul class="nav nav-justified ">
                                     <li class="nav-item">
                                         <a href="{{url('topic')}}" class="nav-link">Main Page</a>
                                     </li>
+
                                     <li class="nav-item">
                                         <a href="{{url('block/create')}}" class="nav-link">Content control</a>
                                     </li>
 
-                                </ul>
-                            </div>
+
+
                         @show
-                    </ul>
+
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
+
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">Login</a></li>
-                            <li><a href="{{ url('/register') }}">Register</a></li>
+                            <li class="nav-item mr-3"><a href="{{ url('/login') }}" class="nav-link">Login</a></li>
+                            <li class="nav-item mr-3"><a href="{{ url('/register') }}" class="nav-link">Register</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -92,9 +94,12 @@
                 @yield('content')
 
             </div>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+
+
 </body>
 </html>
